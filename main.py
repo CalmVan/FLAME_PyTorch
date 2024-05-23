@@ -26,16 +26,17 @@ import trimesh
 
 from flame_pytorch import FLAME, get_config
 
-config = get_config()
-radian = np.pi / 180.0
-flamelayer = FLAME(config)
+config = get_config()    #获取FLAME的配置设置
+radian = np.pi / 180.0      #将度数转换为弧度
+flamelayer = FLAME(config)   #根据给定的配置初始化Flame模型
 
 # Creating a batch of mean shapes
-shape_params = torch.zeros(8, 100).cuda()
+shape_params = torch.zeros(8, 100).cuda()    #创建8*100的张量，用0填充 #shape参数
 
 # Creating a batch of different global poses
-# pose_params_numpy[:, :3] : global rotaation
-# pose_params_numpy[:, 3:] : jaw rotaation
+# pose_params_numpy[:, :3] : global rotaation  #前3列是整体旋转
+# pose_params_numpy[:, 3:] : jaw rotaation    #后3列是下颚旋转
+# pose参数   以弧度定义不同的整体和下颚旋转
 pose_params_numpy = np.array(
     [
         [0.0, 30.0 * radian, 0.0, 0.0, 0.0, 0.0],
@@ -49,19 +50,21 @@ pose_params_numpy = np.array(
     ],
     dtype=np.float32,
 )
-pose_params = torch.tensor(pose_params_numpy, dtype=torch.float32).cuda()
+pose_params = torch.tensor(pose_params_numpy, dtype=torch.float32).cuda() #将数组转换为张量 并移动到GPU
 
 # Cerating a batch of neutral expressions
-expression_params = torch.zeros(8, 50, dtype=torch.float32).cuda()
+expression_params = torch.zeros(8, 50, dtype=torch.float32).cuda()  #expression参数 8*50张量
+
 flamelayer.cuda()
 
 # Forward Pass of FLAME, one can easily use this as a layer in a Deep learning Framework
 vertice, landmark = flamelayer(
     shape_params, expression_params, pose_params
-)  # For RingNet project
-print(vertice.size(), landmark.size())
+)  # For RingNet project       #将参数传入flamelayer中获取vertice和landmark
 
-if config.optimize_eyeballpose and config.optimize_neckpose:
+print(vertice.size(), landmark.size())   #输出张量的size
+
+if config.optimize_eyeballpose and config.optimize_neckpose:     #优化眼球和鼻子姿势
     neck_pose = torch.zeros(8, 3).cuda()
     eye_pose = torch.zeros(8, 6).cuda()
     vertice, landmark = flamelayer(
