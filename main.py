@@ -73,6 +73,8 @@ if config.optimize_eyeballpose and config.optimize_neckpose:     #优化眼球�
 
 # Visualize Landmarks
 # This visualises the static landmarks and the pose dependent dynamic landmarks used for RingNet project
+
+#Landmarks 可视化
 faces = flamelayer.faces
 for i in range(8):
     vertices = vertice[i].detach().cpu().numpy().squeeze()
