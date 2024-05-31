@@ -25,7 +25,7 @@ For questions regarding the PyTorch implementation please contact soubhik.sanyal
 """
 # Modified from smplx code [https://github.com/vchoutas/smplx] for FLAME
 
-import pickle
+import pickle    #用于序列化和反序列化数据
 
 import numpy as np
 import torch
@@ -41,7 +41,7 @@ class FLAME(nn.Module):
     """
 
     def __init__(self, config):
-        super(FLAME, self).__init__()
+        super(FLAME, self).__init__()   #可以直接写成super().__init__()
         print("creating the FLAME Decoder")
         with open(config.flame_model_path, "rb") as f:
             self.flame_model = Struct(**pickle.load(f, encoding="latin1"))
