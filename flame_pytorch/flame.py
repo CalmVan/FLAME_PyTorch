@@ -44,7 +44,7 @@ class FLAME(nn.Module):
         super(FLAME, self).__init__()   #可以直接写成super().__init__()
         print("creating the FLAME Decoder")
         with open(config.flame_model_path, "rb") as f:    #with open()打开文件后会自动关闭。如果只写open()则需要加入close()。 #"rb"以二进制的方式读取文件中的数据
-            self.flame_model = Struct(**pickle.load(f, encoding="latin1"))    #读取模型，反序列化 # **用于将字典解包为关键字参数，如果是字典{"key1": value1, "key2": value2}，则解包key1=value1, key2=value2
+            self.flame_model = Struct(**pickle.load(f, encoding="latin1"))    #读取模型，反序列化 # **用于将字典解包为关键字参数，如果是字典{"key1": value1, "key2": value2}，则解包key1=value1, key2=value2  #Struct 将字典转换为对象
         self.NECK_IDX = 1
         self.batch_size = config.batch_size
         self.dtype = torch.float32
