@@ -45,14 +45,14 @@ class FLAME(nn.Module):
         print("creating the FLAME Decoder")
         with open(config.flame_model_path, "rb") as f:    #with open()打开文件后会自动关闭。如果只写open()则需要加入close()。 #"rb"以二进制的方式读取文件中的数据
             self.flame_model = Struct(**pickle.load(f, encoding="latin1"))    #读取模型，反序列化 # **用于将字典解包为关键字参数，如果是字典{"key1": value1, "key2": value2}，则解包key1=value1, key2=value2  #Struct 将字典转换为对象
-        self.NECK_IDX = 1
-        self.batch_size = config.batch_size
-        self.dtype = torch.float32
-        self.use_face_contour = config.use_face_contour
-        self.faces = self.flame_model.f
-        self.register_buffer(
+        self.NECK_IDX = 1    #将颈关键索引设置为1
+        self.batch_size = config.batch_size     #样本的批量大小
+        self.dtype = torch.float32     #设置张量的数据类型
+        self.use_face_contour = config.use_face_contour    #bool类型 判断是否使用面部轮廓landmark
+        self.faces = self.flame_model.f     #包含mesh的面部索引，FLAME类可以直接访问面索引
+        self.register_buffer(     #定义缓冲区，用于保存不需要梯度更新的参数
             "faces_tensor",
-            to_tensor(to_np(self.faces, dtype=np.int64), dtype=torch.long),
+            to_tensor(to_np(self.faces, dtype=np.int64), dtype=torch.long),    #to_np将self.faces数据（NumPy数组）转换为int64的NumPy数组  #to_tensor将
         )
 
         # Fixing remaining Shape betas
