@@ -52,7 +52,7 @@ class FLAME(nn.Module):
         self.faces = self.flame_model.f     #包含mesh的面部索引，FLAME类可以直接访问面索引
         self.register_buffer(     #定义缓冲区，用于保存不需要梯度更新的参数
             "faces_tensor",
-            to_tensor(to_np(self.faces, dtype=np.int64), dtype=torch.long),    #to_np将self.faces数据（NumPy数组）转换为int64的NumPy数组  #to_tensor将
+            to_tensor(to_np(self.faces, dtype=np.int64), dtype=torch.long),    #to_np将self.faces数据（NumPy数组）转换为int64的NumPy数组  #to_tensor将NumPy数组转换为Pytorch张量，并指定数据类型为long
         )
 
         # Fixing remaining Shape betas
