@@ -58,12 +58,12 @@ class FLAME(nn.Module):
         # Fixing remaining Shape betas
         # There are total 300 shape parameters to control FLAME; But one can use the first few parameters to express
         # the shape. For example 100 shape parameters are used for RingNet project
-        default_shape = torch.zeros(
-            [self.batch_size, 300 - config.shape_params],
-            dtype=self.dtype,
-            requires_grad=False,
+        default_shape = torch.zeros(       #创建一个全0张量
+            [self.batch_size, 300 - config.shape_params],      #张量的形状【一批样本数量，300中减去形状参数个数】
+            dtype=self.dtype,   #定义张量的数据类型
+            requires_grad=False,   #该张量不需要梯度，说明其在反向传播期间不会更新
         )
-        self.register_parameter(
+        self.register_parameter(     #注册一个可学习的张量
             "shape_betas", nn.Parameter(default_shape, requires_grad=False)
         )
 
